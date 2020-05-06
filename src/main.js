@@ -2,8 +2,18 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import axios from 'axios'
+import myCharts from './lib/echarts'
 
+Vue.use(ElementUI)
+Vue.use(myCharts)
+
+//注册全局方法名
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
+
 
 new Vue({
   router,
