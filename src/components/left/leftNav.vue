@@ -17,10 +17,14 @@
             <i class="el-icon-menu"></i>
             <span slot="title">关键字</span>
         </el-menu-item>
-        <el-menu-item index="/relationship">
-            <i class="el-icon-document"></i>
-            <span slot="title">关系网络</span>
-        </el-menu-item>
+        <el-submenu>
+            <template slot="title">
+                <i class="el-icon-document"></i>
+                <span slot="title">关系网络</span>
+            </template>
+            <el-menu-item index="/enterprise_relationship">企业关系网络</el-menu-item>
+            <el-menu-item index="/personal_relationship">个人关系网络</el-menu-item>
+        </el-submenu>
     </el-menu>
 </template>
 

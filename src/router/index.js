@@ -7,13 +7,15 @@ import LeftNav from '../components/left/leftNav'
 import TopNav from '../components/top/topNav'
 import Main from '../components/main'
 import Keyword  from '../components/personal_keywords'
-import Relationship from '../components/relationship'
+import Personal_Relationship from '../components/personal_relationship'
+import Enterprise_Relationship from '../components/enterprise_relationship'
 import Category from '../components/categories'
 import Topic from '../components/topics'
 import Doc from '../components/docs'
 import MainView from '../views/main'
 import KeywordView from '../views/keyword'
-import RelationshipView  from '../views/relationship'
+import Personal_RelationshipView  from '../views/personal_relationship'
+import Enterprise_RelationshipView  from '../views/enterprise_relationship'
 import CategoryView from '../views/categories'
 import TopicView from '../views/topics'
 import DocView from '../views/docs'
@@ -107,15 +109,28 @@ const routes = [
     }]
   },
   {
-    path: '/relationship',
-    name: 'relationshipView',
-    component: RelationshipView,
+    path: '/personal_relationship',
+    name: 'personal_relationshipView',
+    component: Personal_RelationshipView,
     children: [{
       path: '',
       components: {
         topNav: TopNav,
         leftNav: LeftNav,
-        main: Relationship
+        main: Personal_Relationship
+      }
+    }]
+  },
+  {
+    path: '/enterprise_relationship',
+    name: 'enterprise_relationshipView',
+    component: Enterprise_RelationshipView,
+    children: [{
+      path: '',
+      components: {
+        topNav: TopNav,
+        leftNav: LeftNav,
+        main: Enterprise_Relationship
       }
     }]
   }

@@ -6,10 +6,11 @@ export function getAllRelationship(that) {
 }
 
 export function getPersonalRelationship(that, email) {
+    console.log(email);
     return that.$axios({
         method: 'get',
         url: '/getPersonalRelationship',
-        param: {
+        params: {
             email: email
         }
     })

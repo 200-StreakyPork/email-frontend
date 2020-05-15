@@ -25,8 +25,8 @@
 </template>
 
 <script>
-    import '../api/getUser'
     import 'echarts-wordcloud'
+    import {getAllKeyword, getKeywordByDate} from "@/api/Keyword";
 
     export default {
         name: "personal_keywords",
@@ -36,16 +36,25 @@
         methods: {
             init () {
                 console.log('page named personal_keyword init');
+                let result = getAllKeyword(this);
+                result.then(function (res) {
+                    this.operationData.series.data = res.data.result;
+                    this.$chart.drawChart('relationshipChart', this.operationData)
+                }.bind(this)).catch(function (err) {
+                    console.log(err)
+                });
                 this.$chart.drawChart('keywordChart', this.operationData)
             },
             search() {
-                console.log(this.dateTime, this.categoryValue)
-                // this.$axios({
-                //     method: 'get',
-                //     url: '/getRelationship'
-                // }).then(function (res) {
-                //     console.log(res.data.node)
-                // })
+                console.log(this.dateTime, this.categoryValue);
+                let result = getKeywordByDate(this, this.dateTime);
+                result.then(function (res) {
+                    this.operationData.series.data = res.data.result;
+                    this.$chart.drawChart('relationshipChart', this.operationData)
+                }.bind(this)).catch(function (err) {
+                    console.log(err)
+                });
+                this.$chart.drawChart('keywordChart', this.operationData)
             }
         },
         data () {

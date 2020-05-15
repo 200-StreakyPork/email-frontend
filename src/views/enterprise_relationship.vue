@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: "relationship"
+        name: "enterprise_relationship"
     }
 </script>
 
