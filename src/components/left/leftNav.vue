@@ -17,7 +17,7 @@
             <i class="el-icon-menu"></i>
             <span slot="title">关键字</span>
         </el-menu-item>
-        <el-submenu>
+        <el-submenu index="Relationship">
             <template slot="title">
                 <i class="el-icon-document"></i>
                 <span slot="title">关系网络</span>

@@ -9,7 +9,7 @@
         <div style="padding: 2%">
             <el-collapse v-model="activeName" accordion @change="handleChange">
                 <template v-for="(email, index) in emails">
-                    <el-collapse-item :title="email.title" :name=index>
+                    <el-collapse-item :title="'标题:'+email.title+'; 发件人:'+email.from+'; 收件人:'+email.to" :name=index>
                         <el-tree :data="email.emailData" :props="handleNodeClick"></el-tree>
                     </el-collapse-item>
                 </template>

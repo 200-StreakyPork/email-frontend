@@ -1,20 +1,27 @@
 <template>
     <div>
-        <div class="searchDiv">
-            <el-input class="el-input" v-model="inputEmail" placeholder="请输入用户邮箱" clearable></el-input>
-            <el-button class="el-search-button" type="primary" icon="el-icon-search" @click="search">查找</el-button>
-        </div>
         <div class="drawerDiv">
             <el-button @click="drawer = true" type="primary">
-                点我打开
+                打开搜索栏
             </el-button>
-            <el-drawer
-                    title="我是标题"
-                    :visible.sync="drawer"
-                    :with-header="false">
-                <span>我来啦!</span>
-            </el-drawer>
         </div>
+        <el-drawer
+                title="搜索栏"
+                :visible.sync="drawer"
+                direction="rtl"
+                size="30%">
+            <div class="searchDiv">
+                <el-input class="el-input" v-model="inputEmail" placeholder="请输入用户邮箱" clearable></el-input>
+                <el-button class="el-search-button" type="primary" icon="el-icon-search" @click="search">查找</el-button>
+                <div style="padding-top: 5%; height: 7%">
+                    <el-scrollbar class="el-scrollbar">
+                        <p v-for="(item, i) in this.users" style="margin: 0">
+                            <el-button type="text" @click="chooseMail($event)"> {{item}} </el-button>
+                        </p>
+                    </el-scrollbar>
+                </div>
+            </div>
+        </el-drawer>
         <div class="relationshipChart" id="relationshipChart"></div>
     </div>
 </template>
@@ -22,23 +29,31 @@
 <script>
     import '../api/Relationship'
     import {getAllRelationship, getPersonalRelationship} from "@/api/Relationship";
+    import {getMail} from "@/api/getUser"
 
     export default {
         name: "relationship",
-        mounted: function () {
-            this.init()
+        created() {
+            this.init();
         },
         methods: {
             init() {
                 console.log("page named relationship init");
-                let result = getAllRelationship(this);
+                let result = getPersonalRelationship(this, "zhan@126.com");
                 result.then(function (res) {
                     this.operationData.series[0].data = res.data.node;
                     this.operationData.series[0].links = res.data.link;
                     this.$chart.drawChart('relationshipChart', this.operationData);
                 }.bind(this)).catch(function (err) {
                     console.log(err)
-                })
+                });
+                let result1 = getMail(this);
+                result1.then(function (res) {
+                    this.users = res.data;
+                    console.log(this.users);
+                }.bind(this)).catch(function (err) {
+                    console.log(err)
+                });
             },
             search() {
                 let result = getPersonalRelationship(this, this.inputEmail);
@@ -46,14 +61,28 @@
                     this.operationData.series[0].data = res.data.node;
                     this.operationData.series[0].links = res.data.link;
                     this.$chart.drawChart('relationshipChart', this.operationData);
+                    this.drawer = false
                 }.bind(this)).catch(function (err) {
                     console.log(err)
-                })
+                });
+            },
+            chooseMail: function (event) {
+                let el = event.currentTarget;
+                let result = getPersonalRelationship(this, el.innerText);
+                result.then(function (res) {
+                    this.operationData.series[0].data = res.data.node;
+                    this.operationData.series[0].links = res.data.link;
+                    this.$chart.drawChart('relationshipChart', this.operationData);
+                    this.drawer = false
+                }.bind(this)).catch(function (err) {
+                    console.log(err)
+                });
             }
         },
         data() {
             return {
                 inputEmail: '',
+                users: [1,2,3],
                 drawer: false,
                 operationData: {
                     animation: true,
@@ -167,18 +196,14 @@
 
 <style scoped>
     .drawerDiv {
-        z-index: 2;
         margin-left: 2%;
         margin-top: 2%;
         width: 50%;
-        position: absolute;
     }
     .searchDiv {
-        z-index: 2;
-        margin-left: 2%;
-        margin-top: 2%;
-        width: 50%;
-        position: absolute;
+        margin-left: 4%;
+        width: 180%;
+        height: 80%;
     }
     .el-input {
         float: left;
@@ -187,6 +212,10 @@
     .el-search-button {
         float: left;
         margin-left: 1%;
+    }
+    .el-scrollbar {
+        height: 100%;
+        overflow-x: hidden;
     }
     .relationshipChart {
         width: 1200px;

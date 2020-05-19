@@ -10,7 +10,8 @@ export function getKeywordByDate(that, datetime) {
         method: 'get',
         url: '/getKeywordByDate',
         param: {
-            datetime: datetime
+            startTime: datetime[0],
+            endTime: datetime[1]
         }
     })
 }

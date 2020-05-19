@@ -8,6 +8,13 @@ export function getUserName(that, id) {
     })
 }
 
+export function getMail(that) {
+    return that.$axios({
+        method: 'get',
+        url: '/getMail',
+    })
+}
+
 export function getKeyword(that) {
     return that.$axios({
         method: 'get',
