@@ -2,13 +2,14 @@
     <!--显示邮件主题-->
     <div>
         <el-breadcrumb class="header" separator="/">
-            <el-breadcrumb-item :to="{ path: '/category' }">分类详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/category' }">聚类详情</el-breadcrumb-item>
             <el-breadcrumb-item>邮件主题</el-breadcrumb-item>
             <el-breadcrumb-item>邮件详情</el-breadcrumb-item>
         </el-breadcrumb>
-        <h3 style="text-align: center">邮件集分类</h3>
-        <h6 style="text-align: center">分类方式：TF-IDF计算出特征矩阵，使用K-means进行分类。</h6>
-        <el-table :data="categoryData" style="width: 50%; margin: 0px auto">
+        <el-table
+                v-loading="loading"
+                :data="categoryData"
+                style="width: 60%; margin: 2% auto 0px;">
             <el-table-column prop="category" label="邮件类别" align="center"></el-table-column>
             <el-table-column prop="number" label="邮件数量" align="center"></el-table-column>
             <el-table-column prop="check" label="查看详情" align="center">
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+    import {getCategory, getTopic, getDoc} from "@/api/Mail"
     export default {
         name: "categories",
         mounted: function() {
@@ -29,7 +31,21 @@
         },
         methods: {
             init() {
-                console.log("page named categories init")
+                console.log("page named categories init");
+                let catData = this.$route.query.categoryData;
+                if(catData==null){
+                    let result = getCategory(this);
+                    result.then(function (res) {
+                        this.categoryData = res.data;
+                        this.loading = false;
+                    }.bind(this)).catch(function (err) {
+                        console.log(err);
+                    });
+                }
+                else {
+                    this.categoryData = catData;
+                    this.loading = false;
+                }
             },
             check(row) {
                 console.log(row);
@@ -37,26 +53,15 @@
                     path: '/topic',
                     query: {
                         category: row.category,
+                        categoryData: this.categoryData
                     }
                 })
             }
         },
         data() {
             return {
-                categoryData: [
-                    {
-                        category: '类别0',
-                        number: '100'
-                    },
-                    {
-                        category: '类别1',
-                        number: '200'
-                    },
-                    {
-                        category: '类别2',
-                        number: '300'
-                    }
-                ]
+                loading: true,
+                categoryData: []
             }
         }
     }

@@ -1,16 +1,20 @@
 <template>
     <div>
         <el-breadcrumb class="header" separator="/">
-            <el-breadcrumb-item :to="{ path: '/category' }">分类详情</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/topic', query: {category:this.category} }">邮件主题</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/doc', query: {category:this.category, topics:this.topics} }">邮件详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/category', query: {categoryData:this.categoryData} }">聚类详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/topic', query: {category:this.category, categoryData:this.categoryData, topics:this.topics} }">邮件主题</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/doc', query: {category:this.category, categoryData: this.categoryData, topics:this.topics, topic:this.topic} }">邮件详情</el-breadcrumb-item>
             <el-breadcrumb-item></el-breadcrumb-item>
         </el-breadcrumb>
-        <div style="padding: 2%">
+        <div style="padding: 2%" v-loading="loading">
             <el-collapse v-model="activeName" accordion @change="handleChange">
                 <template v-for="(email, index) in emails">
                     <el-collapse-item :title="'标题:'+email.title+'; 发件人:'+email.from+'; 收件人:'+email.to" :name=index>
-                        <el-tree :data="email.emailData" :props="handleNodeClick"></el-tree>
+                        <el-tree :data="email.emailData" :props="handleNodeClick" style="width: 100%">
+                            <span class="span-ellipsis" slot-scope="{ node, data }">
+		                        <span :title="node.label">{{ node.label }}</span>
+                            </span>
+                        </el-tree>
                     </el-collapse-item>
                 </template>
             </el-collapse>
@@ -19,6 +23,7 @@
 </template>
 
 <script>
+    import {getDoc} from "@/api/Mail"
     export default {
         name: "docs",
         mounted: function () {
@@ -28,16 +33,45 @@
             init() {
                 console.log('page named docs init');
                 this.category = this.$route.query.category;
-                this.topics = this.$route.query.topics
-                console.log(this.category)
-            },
-            goBack() {
-                this.$router.push({
-                    path: '/topic',
-                    query: {
-                        category: this.category,
+                this.categoryData = this.$route.query.categoryData;
+                this.topics = this.$route.query.topics;
+                this.topic = this.$route.query.topic;
+                let result = getDoc(this, this.category, this.topic);
+                result.then(function (res) {
+                    let mails = res.data;
+                    console.log(mails);
+                    this.emails = [];
+                    for(let i=0; i<mails.length; i++){
+                        this.emails.push({
+                            title: mails[i].title,
+                            from: mails[i].from,
+                            to: mails[i].to,
+                            emailData: [
+                                {
+                                    label: '关键字',
+                                    children: [{
+                                        label: mails[i].keyword
+                                    }]
+                                },
+                                {
+                                    label: '摘要',
+                                    children: [{
+                                        label: mails[i].abstract
+                                    }]
+                                },
+                                {
+                                    label: '原文',
+                                    children: [{
+                                        label: mails[i].docs
+                                    }]
+                                }
+                            ]
+                        });
                     }
-                })
+                    this.loading = false;
+                }.bind(this)).catch(function (err) {
+                    console.log(err);
+                });
             },
             handleChange(val) {
                 console.log("collapse "+val+" has been touched.");
@@ -48,66 +82,18 @@
         },
         data() {
             return {
+                loading: true,
                 category: '',
+                categoryData: [],
                 topics: [],
+                topic: '',
                 activeName: '1',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
                 },
                 len: 2,
-                emails: [
-                    {
-                        title: '标题0',
-                        from: '发件人0',
-                        to: '收件人0',
-                        emailData: [
-                            {
-                                label: '关键字',
-                                children: [{
-                                    label: '0'
-                                }]
-                            },
-                            {
-                                label: '摘要',
-                                children: [{
-                                    label: '0'
-                                }]
-                            },
-                            {
-                                label: '原文',
-                                children: [{
-                                    label: '0'
-                                }]
-                            }
-                        ]
-                    },
-                    {
-                        title: '标题1',
-                        from: '发件人1',
-                        to: '收件人1',
-                        emailData: [
-                            {
-                                label: '关键字',
-                                children: [{
-                                    label: '1'
-                                }]
-                            },
-                            {
-                                label: '摘要',
-                                children: [{
-                                    label: '1'
-                                }]
-                            },
-                            {
-                                label: '原文',
-                                children: [{
-                                    label: '1'
-                                }]
-                            }
-                        ]
-                    },
-                ]
+                emails: []
             }
         }
     }
@@ -117,5 +103,11 @@
     .header {
         margin-left: 2%;
         margin-top: 2%;
+    }
+    .span-ellipsis {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 </style>

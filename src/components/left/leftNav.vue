@@ -11,7 +11,7 @@
             router>
         <el-menu-item index="/category">
             <i class="el-icon-menu"></i>
-            <span solt="title">邮件分类</span>
+            <span solt="title">邮件聚类</span>
         </el-menu-item>
         <el-menu-item index="/keyword">
             <i class="el-icon-menu"></i>

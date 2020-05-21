@@ -1,16 +1,16 @@
 <template>
     <div>
         <el-breadcrumb class="header" separator="/">
-            <el-breadcrumb-item :to="{ path: '/category' }">分类详情</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/topic', query: {category: this.category}}">邮件主题</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/category', query:{categoryData: this.categoryData}}">聚类详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/topic', query: {category: this.category, categoryData: this.categoryData}}">邮件主题</el-breadcrumb-item>
             <el-breadcrumb-item>邮件详情</el-breadcrumb-item>
         </el-breadcrumb>
-        <div style="margin-left: 5%; margin-top: 2%">
+        <div style="margin-left: 5%; margin-top: 2%" v-loading="loading">
             <template v-for="topic in topics">
                 <el-card class="box-card" style="display: inline-block; margin-top: 15px; margin-left: 2%">
                     <div slot="header" class="clearfix">
                         <span>{{topic.topicName}}</span>
-                        <el-button style="float: right; padding: 3px 0" type="text" @click="check">查看</el-button>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="check(topic.topicName)">查看</el-button>
                     </div>
                     <div v-for="keyword in topic.keywords" :key="keyword" class="text item">
                         {{keyword}}
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+    import {getTopic} from "@/api/Mail"
     export default {
         name: "topics",
         mounted: function () {
@@ -30,64 +31,42 @@
         methods: {
             init() {
                 console.log('page named topics init');
-                this.category = this.$route.query.category
-                console.log(this.category)
+                this.category = this.$route.query.category;
+                this.categoryData = this.$route.query.categoryData;
+                let topics = this.$route.query.topics;
+                if(topics==null){
+                    let result = getTopic(this, this.category);
+                    result.then(function (res) {
+                        this.topics = res.data;
+                        this.loading = false;
+                    }.bind(this)).catch(function (err) {
+                        console.log(err);
+                    });
+                }
+                else {
+                    this.topics = topics;
+                    this.loading = false;
+                }
+
             },
-            check() {
+            check(topic) {
                 this.$router.push({
                     path: '/doc',
                     query: {
                         category: this.category,
-                        topics: this.topics
+                        categoryDat: this.categoryData,
+                        topics: this.topics,
+                        topic: topic
                     }
                 })
             }
         },
         data() {
             return {
+                loading: true,
                 category: '',
-                topics: [
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题1',
-                        keywords: ['f','g','h','i','j']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                    {
-                        topicName: '主题0',
-                        keywords: ['a','b','c','d','e']
-                    },
-                ]
+                categoryData: [],
+                topics: []
             }
         }
 
