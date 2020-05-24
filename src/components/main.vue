@@ -10,7 +10,7 @@
 <script>
     import '../api/getUser'
     export default {
-        name: "main",
+        name: "mainPage",
         mounted: function() {
             this.init()
         },

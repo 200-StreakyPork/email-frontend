@@ -41,6 +41,7 @@
                 console.log("page named relationship init");
                 let result = getPersonalRelationship(this, "zhan@126.com");
                 result.then(function (res) {
+                    console.log(res.data);
                     this.operationData.series[0].data = res.data.node;
                     this.operationData.series[0].links = res.data.link;
                     this.$chart.drawChart('relationshipChart', this.operationData);
@@ -50,7 +51,6 @@
                 let result1 = getMail(this);
                 result1.then(function (res) {
                     this.users = res.data;
-                    console.log(this.users);
                 }.bind(this)).catch(function (err) {
                     console.log(err)
                 });
@@ -58,6 +58,7 @@
             search() {
                 let result = getPersonalRelationship(this, this.inputEmail);
                 result.then(function (res) {
+                    console.log(res.data);
                     this.operationData.series[0].data = res.data.node;
                     this.operationData.series[0].links = res.data.link;
                     this.$chart.drawChart('relationshipChart', this.operationData);

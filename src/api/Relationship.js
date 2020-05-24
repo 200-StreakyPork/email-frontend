@@ -15,3 +15,10 @@ export function getPersonalRelationship(that, email) {
         }
     })
 }
+
+export function getEnterpriseRelationship(that) {
+    return that.$axios({
+        method: 'get',
+        url: '/getEnterpriseRelationship'
+    })
+}

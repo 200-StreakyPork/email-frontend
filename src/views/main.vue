@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: "main"
+        name: "mainPage"
     }
 </script>
 

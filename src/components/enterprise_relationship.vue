@@ -4,7 +4,7 @@
 
 <script>
     import '../api/Relationship'
-    import {getAllRelationship} from "@/api/Relationship";
+    import {getEnterpriseRelationship, getAllRelationship} from "@/api/Relationship";
 
     export default {
         name: "relationship",
@@ -16,6 +16,7 @@
                 console.log("page named relationship init");
                 let result = getAllRelationship(this);
                 result.then(function (res) {
+                    // console.log(res.data);
                     this.operationData.series[0].data = res.data.node;
                     this.operationData.series[0].links = res.data.link;
                     this.$chart.drawChart('relationshipChart', this.operationData);
