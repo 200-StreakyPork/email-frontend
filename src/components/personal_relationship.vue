@@ -181,14 +181,7 @@
                             fontSize: 14
                         },
                         borderWidth: 0
-                    },
-                    // title: [
-                    //     {
-                    //         text: '\u90ae\u7bb1\u5173\u7cfb\u7f51',
-                    //         padding: 5,
-                    //         itemGap: 10
-                    //     }
-                    // ]
+                    }
                 }
             }
         }

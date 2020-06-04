@@ -10,6 +10,14 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
             </el-date-picker>
+            <el-select v-model="value" placeholder="请选择">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
             <el-button id="searchButton" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
         </div>
         <div id="keywordChart"></div>
@@ -43,9 +51,17 @@
                 }
                 else {
                     let result = getKeywordByDate(this, this.dateTime);
+                    let current_value = this.value;
                     result.then(function (res) {
-                        let theme0 = res.data.theme0;
-                        this.setOperationData(theme0);
+                        let theme;
+                        switch (current_value) {
+                            case "选项1":  theme = res.data.theme0; break;
+                            case "选项2":  theme = res.data.theme1; break;
+                            case "选项3":  theme = res.data.theme2; break;
+                            case "选项4":  theme = res.data.theme3; break;
+                            case "选项5":  theme = res.data.theme4; break;
+                        }
+                        this.setOperationData(theme);
                     }.bind(this)).catch(function (err) {
                         console.log(err)
                     });
@@ -71,6 +87,25 @@
             return {
                 name: 'demo',
                 dateTime: [], //yyyy-MM-dd
+                options: [
+                    {
+                        value: '选项1',
+                        label: '聚类1'
+                    }, {
+                        value: '选项2',
+                        label: '聚类2'
+                    }, {
+                        value: '选项3',
+                        label: '聚类3'
+                    }, {
+                        value: '选项4',
+                        label: '聚类4'
+                    }, {
+                        value: '选项5',
+                        label: '聚类5'
+                    }
+                ],
+                value: '',
                 operationData: {
                     animation: true,
                     animationThreshold: 2000,

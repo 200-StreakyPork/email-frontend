@@ -7,16 +7,16 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import myCharts from './lib/echarts'
 
-Vue.use(ElementUI)
-Vue.use(myCharts)
+Vue.use(ElementUI);
+Vue.use(myCharts);
 
 //注册全局方法名
-Vue.prototype.$axios = axios
-Vue.config.productionTip = false
+Vue.prototype.$axios = axios;
+Vue.config.productionTip = false;
 
 
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
