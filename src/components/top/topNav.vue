@@ -25,6 +25,6 @@
         font-size: 30px;
         font-weight:bold;
         color:black;
-        font-family: 宋体;
+        font-family: 微软雅黑;
     }
 </style>

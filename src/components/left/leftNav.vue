@@ -9,6 +9,10 @@
             active-text-color="#ffd04b"
             unique-opened
             router>
+        <el-menu-item index="/emailPage">
+            <i class="el-icon-menu"></i>
+            <span solt="title">邮件分词结果</span>
+        </el-menu-item>
         <el-menu-item index="/category">
             <i class="el-icon-menu"></i>
             <span solt="title">邮件聚类</span>

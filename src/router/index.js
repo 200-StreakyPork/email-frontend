@@ -12,6 +12,7 @@ import Enterprise_Relationship from '../components/enterprise_relationship'
 import Category from '../components/categories'
 import Topic from '../components/topics'
 import Doc from '../components/docs'
+import EmailPage from '../components/emailPage'
 import MainView from '../views/main'
 import KeywordView from '../views/keyword'
 import Personal_RelationshipView  from '../views/personal_relationship'
@@ -19,6 +20,7 @@ import Enterprise_RelationshipView  from '../views/enterprise_relationship'
 import CategoryView from '../views/categories'
 import TopicView from '../views/topics'
 import DocView from '../views/docs'
+import EmailPageView from '../views/emailPage'
 
 Vue.use(VueRouter);
 
@@ -131,6 +133,19 @@ const routes = [
         topNav: TopNav,
         leftNav: LeftNav,
         main: Enterprise_Relationship
+      }
+    }]
+  },
+  {
+    path: '/emailPage',
+    name: 'emailPage',
+    component: EmailPageView,
+    children: [{
+      path: '',
+      components: {
+        topNav: TopNav,
+        leftNav: LeftNav,
+        main: EmailPage
       }
     }]
   }
